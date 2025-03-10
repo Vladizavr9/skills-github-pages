@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Упражнение</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4; /* Light grey background */
+    padding: 20px;
+  }
+
+  #exercise-container {
+    background-color: #fff; /* White container background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 30px;
+    width: 80%; /* Adjust width as needed */
+    max-width: 600px; /* Limit maximum width */
+  }
+
+  .button {
+    padding: 16px 32px;
+    font-size: 21px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease; /* Smooth transition */
+  }
+
+  .button:hover {
+    background-color: #3e8e41; /* Darker green on hover */
+  }
+
+  #russian-sentences {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    margin-top: 20px;
+  }
+
+  .sentence-button {
+    padding: 16px 32px;
+    font-size: 21px;
+    cursor: pointer;
+    background-color: #e0e0e0; /* Light grey for sentence buttons */
+    color: #333; /* Dark grey text */
+    border: none;
+    border-radius: 8px;
+    margin: 10px 0; /* Reduced margin to align */
+    transition: background-color 0.3s ease;
+    width: 80%; /* Adjust width as needed */
+    max-width: 400px; /* Limit maximum width for sentence buttons */
+    box-sizing: border-box; /* Important for correct sizing with padding */
+  }
+
+  .sentence-button:hover {
+    background-color: #ccc; /* Slightly darker grey on hover */
+  }
+
+   #score {
+        font-size: 24px;
+        margin-top: 30px;
+        font-weight: bold;
+    }
+
+  /* Optional: Add some space around the result */
+  #result::before,
+  #result::after {
+    content: " ";
+    display: block;
+    margin: 5px;
+  }
+
+   #score {
+        font-size: 24px;
+        margin-top: 30px;
+        font-weight: bold;
+    }
+   #score::before {
+        content: "💎"; /* Use the same emoji */
+        font-size: 150%; /* 50% larger */
+        margin-right: 5px; /* Add some space between emoji and text */
+    }
+</style>
+</head>
+<body>
+
+<div id="exercise-container">
+  <button class="button" id="speak-button" onclick="speakSentence()">Listen</button>
+
+  <div id="russian-sentences">
+    <button class="sentence-button" id="sentence1" onclick="checkAnswer(this)">  </button>
+    <button class="sentence-button" id="sentence2" onclick="checkAnswer(this)">  </button>
+  </div>
+
+  <div id="result"></div>
+   <div id="score"> x 0</div>
+</div>
+
+
+<script>
+  const sentences = [
+    { english: "I am at school.", correct: "Я в школе.", incorrect: "Я в школе?" },
+    { english: "Is he happy?", correct: "Он счастлив?", incorrect: "Он счастлив." },
+    { english: "She is not tired.", correct: "Она не устала.", incorrect: "Она устала."},
+    { english: "Are we late?", correct: "Мы опоздали?", incorrect: "Мы опоздали."},
+    { english: "They are at the park.", correct: "Они в парке.", incorrect: "Они в парке?" },
+    { english: "Is it your bag?", correct: "Это твоя сумка?", incorrect: "Это твоя сумка."},
+    { english: "You are not here.", correct: "Тебя здесь нет.", incorrect: "Ты здесь." },
+    { english: "Are they students?", correct: "Они студенты?", incorrect: "Они студенты."},
+    { english: "He is my friend.", correct: "Он мой друг.", incorrect: "Он мой друг?" },
+    { english: "Is she at work?", correct: "Она на работе?", incorrect: "Она на работе."},
+    { english: "We are not ready.", correct: "Мы не готовы.",  incorrect: "Мы готовы."},
+    { english: "Are you at home?", correct: "Ты дома?", incorrect: "Ты дома."},
+    { english: "It is not cold.", correct: "Не холодно.", incorrect: "Холодно."},
+    { english: "Is he in the garden?", correct: "Он в саду?", incorrect: "Он в саду."},
+    { english: "They are not at school.", correct: "Их нет в школе.", incorrect: "Они в школе."},
+    { english: "Are we friends?", correct: "Мы друзья?", incorrect: "Мы друзья."},
+    { english: "I am not hungry.", correct: "Я не голоден.", incorrect: "Я голоден."},
+    { english: "Is she your sister?", correct: "Она твоя сестра?", incorrect: "Она твоя сестра."},
+    { english: "You are right.", correct: "Ты прав.", incorrect: "Ты прав?" },
+    { english: "Are they happy?", correct: "Они счастливы?", incorrect: "Они счастливы."},
+    { english: "He is not at the party.", correct: "Его нет на вечеринке.", incorrect: "Он на вечеринке."},
+    { english: "Is it raining?", correct: "Идёт дождь?", incorrect: "Идёт дождь."},
+    { english: "We are at the cinema.", correct: "Мы в кино.", incorrect: "Мы в кино?" },
+    { english: "Are you a teacher?", correct: "Ты учитель?", incorrect: "Ты учитель."},
+    { english: "She is not my friend.", correct: "Она не моя подруга.", incorrect: "Она моя подруга."},
+    { english: "Is he your brother?", correct: "Он твой брат?", incorrect: "Он твой брат."},
+    { english: "They are not here.", correct: "Их здесь нет.", incorrect: "Они здесь."},
+    { english: "Are we late for the meeting?", correct: "Мы опаздываем на встречу?", incorrect: "Мы опаздываем на встречу."},
+    { english: "I am a student.", correct: "Я студент.", incorrect: "Я студент?" },
+    { english: "Is it your book?", correct: "Это твоя книга?", incorrect: "Это твоя книга."},
+  ];
+
+  let currentSentenceIndex = 0;
+  let speechSynth = null;
+  let score = 0;
+
+  function startExercise() {
+    currentSentenceIndex = Math.floor(Math.random() * sentences.length);
+    speechSynth = window.speechSynthesis;
+    loadNextSentence();
+  }
+
+  function loadNextSentence() {
+    const sentenceData = sentences[currentSentenceIndex];
+    const button1 = document.getElementById("sentence1");
+    const button2 = document.getElementById("sentence2");
+
+    // Randomize button content
+    const isCorrectFirst = Math.random() < 0.5;
+    button1.textContent = isCorrectFirst ? sentenceData.correct : sentenceData.incorrect;
+    button2.textContent = isCorrectFirst ? sentenceData.incorrect : sentenceData.correct;
+
+    document.getElementById("result").textContent = "";
+
+    if (speechSynth) {
+      speakSentence();
+    }
+  }
+
+  function speakSentence() {
+    if (speechSynth && 'speechSynthesis' in window) {
+      const sentenceData = sentences[currentSentenceIndex];
+      const utterance = new SpeechSynthesisUtterance(sentenceData.english);
+
+      let voices = speechSynth.getVoices();
+
+      if (voices.length === 0) {
+        speechSynth.onvoiceschanged = function() {
+          voices = speechSynth.getVoices();
+          setEnglishVoice(utterance);
+          speechSynth.speak(utterance);
+        };
+      } else {
+           setEnglishVoice(utterance);
+           speechSynth.speak(utterance);
+      }
+    } else {
+      alert("Web Speech API не поддерживается.");
+    }
+  }
+
+  function setEnglishVoice(utterance) {
+      let voices = speechSynth.getVoices();
+      let englishUSVoice = voices.find(voice => voice.lang === 'en-US');
+
+      if (englishUSVoice) {
+          utterance.voice = englishUSVoice;
+      } else {
+           console.warn("Американский английский голос не найден. Используется голос по умолчанию.");
+      }
+  }
+
+  function checkAnswer(button) {
+    const selectedSentence = button.textContent;
+    const sentenceData = sentences[currentSentenceIndex];
+    const resultDiv = document.getElementById('result');
+
+    if (selectedSentence === sentenceData.correct) {
+      resultDiv.textContent = "";
+      score++;
+      updateScoreDisplay();
+    } else {
+       resultDiv.textContent = "";
+    }
+
+    currentSentenceIndex = (currentSentenceIndex + 1) % sentences.length;  // Loop back to the beginning
+    setTimeout(loadNextSentence, 1500); // Load next sentence after a short delay
+  }
+
+  function updateScoreDisplay() {
+      document.getElementById('score').textContent = ` x ${score}`;
+  }
+
+  startExercise();
+</script>
+
+</body>
+</html>
