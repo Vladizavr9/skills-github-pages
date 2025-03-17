@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Sentences with Translations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .card-row {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            width: 420px;
+            height: 300px; /* Increased height to accommodate more content */
+            perspective: 1000px;
+            position: relative;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.4s;
+            transform-style: preserve-3d;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+            border-radius: 15px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* Changed to space-around */
+        }
+
+        .card-front {
+            background-color: #e8f0fe;
+            color: #4a4a4a;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #d7f1da;
+            color: #383838;
+        }
+
+        .sentence {
+            font-size: 17px;
+            line-height: 1.4;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        /* Button Styles */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .card-button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 22px;
+            opacity: 0.7;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+
+        .card-button:active {
+            transform: scale(0.95);
+        }
+
+        .correct-button {
+            background-color: rgba(76, 175, 80, 0.7); /* Semi-transparent green */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .correct-button.active {
+            background-color: #00FF00; /* Very bright green, fully opaque  */
+            opacity: 1;
+        }
+
+        .incorrect-button {
+            background-color: rgba(244, 67, 54, 0.7); /* Red, transparent */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .incorrect-button.active {
+            background-color: #f44336;
+            opacity: 1;
+        }
+
+        .correct-button::before {
+            content: '\2713';
+        }
+        .incorrect-button::before {
+            content: '\2715';
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Card 1 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 1)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>Hi! My name is Larisa.</b></div>
+                        <div class="sentence"><b>I'm 64 years old. I live in Atlanta, the USA.</b></div>
+                        <div class="sentence"><b>I am retired now but I used to work as a doctor.</b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>Привет! Меня зовут Лариса.</b></div>
+                        <div class="sentence"><b>Мне 64 года. Я живу в Атланте, США.</b></div>
+                        <div class="sentence"><b>Сейчас я на пенсии, но раньше работала врачом.</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 1)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 1)">
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 2)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>My job was helping people maintain their health.</b></div>
+                        <div class="sentence"><b>I studied at a medical university.</b></div>
+                        <div class="sentence"><b>It was challenging but rewarding experience.</b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>Моя работа заключалась в помощи людям поддерживать здоровье.</b></div>
+                        <div class="sentence"><b>Я училась в медицинском университете.</b></div>
+                        <div class="sentence"><b>Это был сложный, но полезный опыт.</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 2)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 2)">
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 3)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>In my free time, I enjoy working in my garden.</b></div>
+                        <div class="sentence"><b>I often go to my daughter's house on weekends.</b></div>
+                        <div class="sentence"><b>It helps me relax and spend time with my grandsons.</b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>В свободное время я люблю работать в саду.</b></div>
+                        <div class="sentence"><b>Я часто езжу к дочери по выходным.</b></div>
+                        <div class="sentence"><b>Это помогает мне расслабиться и проводить время с внуками.</b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 3)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 3)">
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 4)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>I also like watching TV in the evening.</b></div>
+                        <div class="sentence"><b>Right now, I'm reading a book by Agatha Christie.</b></div>
+                         <div class="sentence"><b></b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>Мне также нравится смотреть телевизор по вечерам.</b></div>
+                        <div class="sentence"><b>Сейчас я читаю книгу Агаты Кристи.</b></div>
+                        <div class="sentence"><b></b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 4)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 4)">
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 5)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>I'm passionate about traveling.</b></div>
+                        <div class="sentence"><b>I've visited countries like Italy, Germany, and Spain.</b></div>
+                         <div class="sentence"><b></b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>Я увлекаюсь путешествиями.</b></div>
+                        <div class="sentence"><b>Я посетила такие страны, как Италия, Германия и Испания.</b></div>
+                        <div class="sentence"><b></b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 5)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 5)">
+                </button>
+            </div>
+        </div>
+
+              <!-- Card 6 -->
+        <div class="card-row">
+            <div class="card" onclick="flipCard(this, 6)">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="sentence"><b>My dream is to visit Japan one day.</b></div>
+                        <div class="sentence"><b>I'm fascinated by Japanese culture and traditions.</b></div>
+                         <div class="sentence"><b></b></div>
+                    </div>
+                    <div class="card-back">
+                        <div class="sentence"><b>Моя мечта - когда-нибудь посетить Японию.</b></div>
+                        <div class="sentence"><b>Меня очаровывает японская культура и традиции.</b></div>
+                        <div class="sentence"><b></b></div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button class="card-button correct-button" onclick="markCard(this, true, 6)">
+                </button>
+                <button class="card-button incorrect-button" onclick="markCard(this, false, 6)">
+                </button>
+            </div>
+        </div>
+
+        </div>
+
+    <script>
+        function flipCard(card, cardIndex) {
+            card.classList.toggle('flipped');
+        }
+
+        function markCard(button, isCorrect, cardIndex) {
+            const buttonContainer = button.parentNode;
+            const buttons = buttonContainer.querySelectorAll('.card-button');
+            // Reset all button styles
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Set styles for the button
+            button.classList.add('active');
+            console.log(`Card ${cardIndex} marked as ${isCorrect ? 'correct' : 'incorrect'}`);
+        }
+    </script>
+</body>
+</html>
